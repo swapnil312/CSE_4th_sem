@@ -92,7 +92,7 @@ int main()
     }
     else
     {
-        cout<<str<<" is not accepted"<<dfa;
+        cout<<str<<" is not accepted";
     }
     return 0;
 }
