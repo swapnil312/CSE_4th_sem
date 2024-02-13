@@ -1,9 +1,9 @@
-//WAP to implement NFA to accept strings starting with 1 and ending with 0.
+//WAP to implement NFA to accept strings starting with 1 and ending with 0
 # include <iostream>
 # include <cstring>
+# include <vector>
 using namespace std;
-int cst1 = 0;
-int cst2 = 0;
+
 int isValid(string str)
 {
     int f = 0;
@@ -29,42 +29,70 @@ int isValid(string str)
     }
     
 }
+
 int isAccepted(string str)
 {
-
     int l = str.length();
-    int tt1[4][2] = {
-        {3,1},
-        {1,1},
-        {2,1},
-        {3,3}
-    };
-    int tt2[4][2] = {                       //DFA
-        {3,1},
-        {2,1},
-        {2,1},
-        {3,3}
-    };
+    vector <int> cst;
+    cst.push_back(0);
     for(int i = 0; i < l; i++)
     {
-        cst1 = tt1[cst1][str[i] - '0'];
-        cst2 = tt2[cst2][str[i] - '0'];
+        int size = cst.size();
+        for(int j = 0; j < size; j++)
+        {
+            if(str[i] == '0')
+            {
+                if(cst[j] == 0)
+                {
+                    cst.erase(cst.begin()+j);
+                    
+                }
+                else if(cst[j] == 1)
+                {
+                    cst.push_back(2);
+                }
+                else if(cst[j] == 2)
+                {
+                    cst.erase(cst.begin()+j);
+                }
+            }
+            else if(str[i] == '1')
+            {
+                if(cst[j] == 0)
+                {
+                    cst.push_back(1);
+                }
+                else if(cst[j] == 1)
+                {
+                    // cst.erase(cst.begin()+j);
+                }
+                else if(cst[j] == 2)
+                {
+                    cst.erase(cst.begin()+j);
+                }
+            }
+            else
+            {
+                return 0;
+            }
+            
+        }
     }
-    if((cst1 == 2)||(cst2 == 2))
+    for(int i = 0; i < cst.size(); i++)
     {
-        return 1;
+        if(cst[i] == 2)
+        {
+            return 1;
+        }
     }
-    else
-    {
-        return 0;
-    }
-
+    return 0;
 }
 int main()
 {
     string str;
     cout<<"Enter a string: ";
     cin>>str;
+    
     if((isAccepted(str))&&(isValid(str)))
     {
         cout<<str<<" is accepted.";
