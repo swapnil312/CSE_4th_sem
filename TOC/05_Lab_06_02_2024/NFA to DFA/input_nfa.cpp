@@ -1,4 +1,4 @@
-// NFA to DFA ====> 110 as substring
+// NFA to DFA ====> Input NFA
 # include <iostream>
 # include <cstring>
 # include <cmath>
@@ -56,17 +56,18 @@ int main()
         cin>>nfa_tt[i][0];
         for(int j = 1; j <= 2; j++)
         {
-            cout<<"Enter transition from "<<nfa_tt[i][0]<<" when input is "<<j-1<<
+            
+            cout<<"Enter transition from "<<nfa_tt[i][0]<<" when input is "<<j-1<<"(-1 for phi)"<<": ";
+            cin>>nfa_tt[i][j];
+            if(nfa_tt[i][j] == "-1")
+            {
+                nfa_tt[i][j] = "";
+            }
         }
 
     }
-    string nfa_tt[4][3] = {
-        {"0","0", "01"},
-        {"1","", "2"},
-        {"2","3", ""},
-        {"3","3", "3"}
-    };
-    int x = pow(2,4);
+
+    int x = pow(2,n_states);
     int t = 0;
     string states[x];
     string dfa_tt[x][3];
