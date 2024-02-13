@@ -1,33 +1,9 @@
-// NFA to DFA ====> 110 as substring
+// NFA to DFA ====> ending with 00
 # include <iostream>
 # include <cstring>
 # include <cmath>
 using namespace std;
-int isValid(string str)
-{
-    int f = 0;
-    int l = str.length();
-    for(int i = 0; i < l; i++)
-    {
-        if((str[i] == '0')||(str[i] == '1'))
-        {
-            f = 0;
-        }
-        else{
-            f = 1;
-            break;
-        }
-    }
-    if(f == 0)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-    
-}
+
 
 int check_presence(string s1, string arr[], int l)
 {
@@ -66,39 +42,6 @@ string remove_duplicate(string str)
         }
     }
     return str1;
-}
-
-int isAccepted(string word)
-{
-    string state = "0";
-    int l_w = word.length();
-    for(int i = 0; i < l_w; i++)
-    {
-        if(state == "0")
-        {
-            if(word[i] == '0'){state = "01";}
-            else if(word[i] == '1'){state = "0";}
-        }
-        else if(state == "01")
-        {
-            if(word[i] == '0'){state = "012";}
-            else if(word[i] == '1'){state = "0";}
-        }
-        else if(state == "012")
-        {
-            if(word[i] == '0'){state = "012";}
-            else if(word[i] == '1'){state = "0";}
-        }
-        
-    }
-    if(state == "012")
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
 }
 
 int main()
@@ -156,17 +99,4 @@ int main()
         cout<<dfa_tt[i][0]<<"\t"<<dfa_tt[i][1]<<"\t"<<dfa_tt[i][2]<<endl;
     }
 
-    string word = "";
-    cout<<endl<<"Enter a string: ";
-    cin>>word;
-    if(isValid(word)&&isAccepted(word))
-    {
-        cout<<word<<" is accepted";
-    }
-    else
-    {
-        cout<<word<<" is not accepted";
-    }
-
-    return 0;
 }
