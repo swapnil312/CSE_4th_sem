@@ -63,6 +63,29 @@ int rtrn_cmpnts_edge_rm(int vertices, pair<int, int> p, vector<vector<int>> adjL
     updated_adjList[p.second].erase(iterator1);
     return countComponents(vertices, updated_adjList);
 }
+vector<vector<int>> rtrn_adjList_edge_rm(int vertices, pair<int, int> p, vector<vector<int>> adjList)
+{
+    vector<vector<int>> updated_adjList = adjList;
+    auto iterator = updated_adjList[p.first].begin();
+    for(auto it = updated_adjList[p.first].begin(); it != updated_adjList[p.first].end(); it++)
+    {
+        if(*it == p.second)
+        {
+            iterator = it;
+        }
+    }
+    updated_adjList[p.first].erase(iterator);
+    auto iterator1= updated_adjList[p.second].begin();
+    for(auto it = updated_adjList[p.second].begin(); it != updated_adjList[p.second].end(); it++)
+    {
+        if(*it == p.first)
+        {
+            iterator1 = it;
+        }
+    }
+    updated_adjList[p.second].erase(iterator1);
+    return updated_adjList;
+}
 
 int rtn_cmpnts_vertex_rm(int vertices, int vertex, vector<vector<int>> adjList)
 {
@@ -80,9 +103,44 @@ int rtn_cmpnts_vertex_rm(int vertices, int vertex, vector<vector<int>> adjList)
     return count_components;
 }
 
+int factorial(int n) 
+{ 
+    return (n==1 || n==0) ? 1: n * factorial(n - 1);  
+}
+
+vector<vector<int>> functionx(string str_edge, int vertices, pair<int, int> edge_arr[],vector<vector<int>> adjList)
+{
+    int swapnil = factorial(str_edge.size());
+    vector<vector<int>> v(swapnil);
+    vector<vector<int>> updated_adjList = adjList;
+    int x = 0;
+    string s = str_edge;
+    sort(s.begin(), s.end());
+    do{
+
+        string str = s;    
+        updated_adjList = adjList;
+        for(int i = 0; i < str.length(); i++)
+        {
+            int e = (int)str[i] - 48;
+            updated_adjList = rtrn_adjList_edge_rm(vertices, edge_arr[e], updated_adjList);
+            if(countComponents(vertices, updated_adjList) > 1)
+            {
+                v[x].emplace_back(e);
+                break;
+            }
+            v[x].emplace_back(e);
+        }
+        x++;
+    }
+    while(next_permutation(s.begin(), s.end()));
+    return v;
+}
+
 int main()
 {
     int vertices, edges;
+    string str_edge = "";
     cout<<"Enter number of vertices: ";
     cin>>vertices;
     cout<<"Enter number of edges: ";
@@ -102,6 +160,7 @@ int main()
         adjList[x].push_back(y);
         edges_arr[i] = {x,y};
         adjList[y].push_back(x);
+        str_edge = str_edge+(to_string(i));
     }
     
     int components_when_edge_removed[edges];
@@ -116,11 +175,37 @@ int main()
     }
     if(cut_edges.size() == 0)
     {
-        cout<<"No cut edges..."<<endl;
+        cout<<"No singular cut edges..."<<endl;
+        vector<vector<int>> vect = functionx(str_edge, vertices, edges_arr, adjList);
+        auto temp_it = vect.begin();
+        int min = (*temp_it).size();
+        cout<<"We have to cut a minimum of "<<min<<" edges of the grpah..."<<endl;
+        cout<<"Possible cut sequences are..."<<endl;
+        set<set<int>> st;
+        for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
+        {
+            if((*it).size() == min) 
+            {
+                set<int> st1;
+                for(int z = 0; z < min; z++) st1.insert((*it)[z]);
+                st.insert(st1);
+            }
+            
+        }
+        for(auto it : st)
+        {
+            for(auto it1: it)
+            {
+                cout<<it1<<" ";
+            }
+            cout<<endl;
+        }
+        
+        
     }
     else
     {
-        cout<<"No of cut edges are "<<cut_edges.size()<<endl;
+        cout<<"No of singular cut edges are "<<cut_edges.size()<<endl;
         cout<<"Cut edge(s) are ..."<<endl;
         for(auto it : cut_edges)
         {
@@ -150,5 +235,6 @@ int main()
             cout<<"Vertex: "<<it<<endl;
         }
     }
+    
     return 0;
 }
