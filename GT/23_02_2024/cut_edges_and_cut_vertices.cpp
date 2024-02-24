@@ -109,7 +109,6 @@ int main()
     for(int i = 0; i < edges; i++)
     {
         components_when_edge_removed[i] = rtrn_cmpnts_edge_rm(vertices, edges_arr[i], adjList);
-        cout<<"Disconnected components when edge "<<i<<" is removed : "<<components_when_edge_removed[i]<<endl;
         if(components_when_edge_removed[i] > 1)
         {
             cut_edges.emplace_back(i);
@@ -133,7 +132,6 @@ int main()
     for(int i = 0; i < vertices; i++)
     {
         components_when_vertex_removed[i] = rtn_cmpnts_vertex_rm(vertices, i, adjList);
-        cout<<"Disconnected components when vertex "<<i<<" is removed : "<<components_when_vertex_removed[i]<<endl;
         if(components_when_vertex_removed[i] > 1)
         {
             cut_vertices.emplace_back(i);
