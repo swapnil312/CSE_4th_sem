@@ -14,6 +14,7 @@ vector<int> bfsTraversal(int start, int n, vector<vector<int>> &adj, int vis[])
         traversal_print.push_back(x);
         for(auto it : adj[x])
         {
+            // if((vis[it] == 0)&&(vis[it] != -1))
             if(vis[it] == 0)
             {
                 vis[it] = 1;
@@ -137,10 +138,59 @@ vector<vector<int>> functionx(string str_edge, int vertices, pair<int, int> edge
     return v;
 }
 
+vector<vector<int>> functiony(string str_vertices, int vertices,vector<vector<int>> adjList)
+{
+    int swapnil = factorial(str_vertices.size());
+    vector<vector<int>> v(swapnil);
+    int updated_vis[vertices] = {0};
+    int x = 0;
+    string s = str_vertices;
+    sort(s.begin(), s.end());
+    do{
+
+        string str = s;  
+        for(int z = 0; z < vertices; z++)
+        {
+            updated_vis[z] = 0;
+        }
+        for(int i = 0; i < str.length(); i++)
+        {
+            int e = (int)str[i] - 48;
+            updated_vis[e] = -1;
+            for(int z = 0; z < vertices; z++)
+            {
+                updated_vis[z] = 0;
+            }
+            for(int h = 0; h <= i; h++) updated_vis[(int)str[h] - 48] = -1;
+            int count_components = 0;
+            for(int j = 0; j < vertices; j++)
+            {
+                if(updated_vis[j] == 0)
+                {
+                    vector<int> result = bfsTraversal(j,vertices, adjList, updated_vis);
+                    count_components++;
+                    
+                }
+            }
+            if(count_components > 1)
+            {
+                v[x].emplace_back(e);
+                break;
+            }
+            v[x].emplace_back(e);
+        }
+        x++;
+    }
+    while(next_permutation(s.begin(), s.end()));
+    return v;
+}
+
+
 int main()
 {
     int vertices, edges;
     string str_edge = "";
+    string str_vertex = "";
     cout<<"Enter number of vertices: ";
     cin>>vertices;
     cout<<"Enter number of edges: ";
@@ -151,6 +201,7 @@ int main()
     for(int i = 0; i < vertices; i++)
     {
         adjList.push_back({});
+        str_vertex = str_vertex+(to_string(i));
     }
     for(int i = 0; i < edges; i++)
     {
@@ -179,9 +230,18 @@ int main()
         vector<vector<int>> vect = functionx(str_edge, vertices, edges_arr, adjList);
         auto temp_it = vect.begin();
         int min = (*temp_it).size();
+        
+        set<set<int>> st;
+        for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
+        {
+            if((*it).size() < min) 
+            {
+                min = (*it).size();
+            }
+            
+        }
         cout<<"We have to cut a minimum of "<<min<<" edges of the grpah..."<<endl;
         cout<<"Possible cut sequences are..."<<endl;
-        set<set<int>> st;
         for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
         {
             if((*it).size() == min) 
@@ -205,7 +265,7 @@ int main()
     }
     else
     {
-        cout<<"No of singular cut edges are "<<cut_edges.size()<<endl;
+        cout<<"Number of singular cut edges are "<<cut_edges.size()<<endl;
         cout<<"Cut edge(s) are ..."<<endl;
         for(auto it : cut_edges)
         {
@@ -224,11 +284,45 @@ int main()
     }
     if(cut_vertices.size() == 0)
     {
-        cout<<"No cut vertices..."<<endl;
+        cout<<"No singular cut vertices..."<<endl;
+
+        vector<vector<int>> vect = functiony(str_vertex, vertices, adjList);
+        auto temp_it = vect.begin();
+        int min = (*temp_it).size();      
+        set<set<int>> st;
+        for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
+        {
+            if((*it).size() < min) 
+            {
+                min = (*it).size();
+            }
+            
+        }
+        cout<<"We have to cut a minimum of "<<min<<" vertices of the graph..."<<endl;
+        cout<<"Possible cut sequences are..."<<endl;
+        for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
+        {
+            if((*it).size() == min) 
+            {
+                set<int> st1;
+                for(int z = 0; z < min; z++) st1.insert((*it)[z]);
+                st.insert(st1);
+            }
+            
+        }
+        for(auto it : st)
+        {
+            for(auto it1: it)
+            {
+                cout<<it1<<" ";
+            }
+            cout<<endl;
+        }
+        
     }
     else
     {
-        cout<<"No of cut vertices are "<<cut_vertices.size()<<endl;
+        cout<<"Number of cut vertices are "<<cut_vertices.size()<<endl;
         cout<<"Cut vertice(s) are ..."<<endl;
         for(auto it : cut_vertices)
         {
