@@ -226,7 +226,7 @@ int main()
     }
     if(cut_edges.size() == 0)
     {
-        cout<<"No singular cut edges..."<<endl;
+        // cout<<"No singular cut edges..."<<endl;
         vector<vector<int>> vect = functionx(str_edge, vertices, edges_arr, adjList);
         auto temp_it = vect.begin();
         int min = (*temp_it).size();
@@ -240,8 +240,8 @@ int main()
             }
             
         }
-        cout<<"We have to cut a minimum of "<<min<<" edges of the grpah..."<<endl;
-        cout<<"Possible cut sequences are..."<<endl;
+        cout<<"We have to cut a minimum of "<<min<<" edges of the graph to make it disconnected."<<endl;
+        cout<<"Possible cut sequences of edges are..."<<endl;
         for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
         {
             if((*it).size() == min) 
@@ -256,21 +256,22 @@ int main()
         {
             for(auto it1: it)
             {
-                cout<<it1<<" ";
+                cout<<"Edge: "<<it1<<"    ";
             }
             cout<<endl;
         }
-        
+        cout<<"So edge connectivity = "<<min<<endl;
         
     }
     else
     {
-        cout<<"Number of singular cut edges are "<<cut_edges.size()<<endl;
+        cout<<"Number of cut edges are "<<cut_edges.size()<<endl;
         cout<<"Cut edge(s) are ..."<<endl;
         for(auto it : cut_edges)
         {
             cout<<"Edge: "<<it<<endl;
         }
+        cout<<"So edge connectivity = 1"<<endl;
     }
     int components_when_vertex_removed[vertices];
     vector<int> cut_vertices;
@@ -284,7 +285,7 @@ int main()
     }
     if(cut_vertices.size() == 0)
     {
-        cout<<"No singular cut vertices..."<<endl;
+        // cout<<"No singular cut vertices..."<<endl;
 
         vector<vector<int>> vect = functiony(str_vertex, vertices, adjList);
         auto temp_it = vect.begin();
@@ -298,8 +299,8 @@ int main()
             }
             
         }
-        cout<<"We have to cut a minimum of "<<min<<" vertices of the graph..."<<endl;
-        cout<<"Possible cut sequences are..."<<endl;
+        cout<<"We have to cut a minimum of "<<min<<" vertices of the graph to make it disconnected."<<endl;
+        cout<<"Possible cut sequences of vertices are..."<<endl;
         for(vector<vector<int>>::iterator it = vect.begin(); it != vect.end(); it++)
         {
             if((*it).size() == min) 
@@ -314,11 +315,11 @@ int main()
         {
             for(auto it1: it)
             {
-                cout<<it1<<" ";
+                cout<<"Vertex: "<<it1<<"   ";
             }
             cout<<endl;
         }
-        
+        cout<<"So vertex connectivity = "<<min<<endl;
     }
     else
     {
@@ -328,6 +329,7 @@ int main()
         {
             cout<<"Vertex: "<<it<<endl;
         }
+        cout<<"So vertex connectivity = 1"<<endl;
     }
     
     return 0;
