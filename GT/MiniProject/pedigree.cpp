@@ -8,10 +8,6 @@ class individual{
     int isColorBlind = 0;
     int gender = 0;
     map<int, vector<string>> combinations;
-    string chromosome_sequence = "";
-    vector <individual*> children;
-    individual* father;
-    individual* mother;
     
 };
 
