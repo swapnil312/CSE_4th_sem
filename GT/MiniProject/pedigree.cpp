@@ -4,7 +4,7 @@ using namespace std;
 
 class individual{
     public:
-    string code = "";
+    // string code = "";
     int isColorBlind = 0;
     int gender = 0;
     map<int, vector<string>> combinations;
