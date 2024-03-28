@@ -55,8 +55,92 @@ void generate_combinations(individual* ind){
             ind->combinations[1] = {"XcXc"};
         }
     }
+
+    vector<vector<string>> combinations(2,vector<string>(2));
+    combinations[0][0] = "XnYn";
+    combinations[0][1] = "XcYn";
+    combinations[1][0] = "XnXnXnXc";
+    combinations[1][1] = "XcYc";
+
     // cout<<"Executing_generate_combinations"<<endl;
 }
+
+
+vector<vector<int>> rtn_bipartite(vector<int> parent1, vector<int> parent2){
+    vector<vector<int>> adjList(parent1.size()+parent2.size());
+    for(auto it1 : parent1){
+        adjList[it1] = parent2;
+    }
+    for(auto it2 : parent2){
+        adjList[it2] = parent1;
+    }
+    return adjList;
+}
+
+vector<vector<int>> rtn_edges(vector<vector<int>> adjList, int p){
+    vector<vector<int>> edges;
+    int x = 0;
+    for(auto it : adjList){
+        
+        for(auto it1 : it){
+            vector<int> edge;
+            edge.push_back(x);
+            edge.push_back(it1);
+            edges.push_back(edge);
+        }
+        if(x==p) break;
+        x++;
+    }
+    cout<<"Printing edges..."<<endl;
+    for(auto edge : edges) {
+        cout<<"{";
+        for(auto x : edge){
+            cout<<x<<",";
+        }
+    }
+    cout<<endl;
+    return edges;
+}
+
+vector<string> decode_edges(map<int,string> encoded_gametes, vector<vector<int>> edges){
+    vector<string> vect;
+    for(auto edge: edges){
+        string str = "";
+        for(auto x : edge){
+            str += encoded_gametes[x];
+        }
+        vect.push_back(str);
+    }
+    return vect;
+}
+
+vector<string> functionx(string p1, string p2){
+    // int l1 = p1.length()/2;
+    // int l2 = p2.length()/2;
+    vector<int> parent1;
+    vector<int> parent2;
+    map<int,string> encoded_gametes;
+
+    int x = 0;
+    int p = 0;
+    for(int i = 0; i < p1.length(); i+=2){
+        encoded_gametes[x] = p1.substr(i,2);
+        parent1.push_back(x);
+        x++;
+    }
+    p = x-1;
+    for(int j = 0; j < p2.length(); j+=2){
+        encoded_gametes[x] = p2.substr(j,2);
+        parent2.push_back(x); 
+        x++;
+    }
+    vector<vector<int>> bipartite_graph = rtn_bipartite(parent1,parent2);
+    vector<vector<int>> edges = rtn_edges(bipartite_graph,p);
+    vector<string> vect = decode_edges(encoded_gametes, edges);
+    return vect;
+}
+
+
 vector<string> generate_meiosis_combinations(individual* ind1, individual *ind2){
     vector<string> ans;
     string str0 = "";
@@ -114,6 +198,26 @@ vector<string> generate_meiosis_combinations(individual* ind1, individual *ind2)
     // cout<<"flag1";
     // cout<<str0<<endl;
     // cout<<str1<<endl;
+
+    vector<vector<string>> combinations(2,vector<string>(2));
+    combinations[0][0] = "XnYn";
+    combinations[0][1] = "XcYn";
+    combinations[1][0] = "XnXnXnXc";
+    combinations[1][1] = "XcXc";
+
+
+    cout<<"Checking for combinations..."<<endl;
+    cout<<"Original..."<<endl;
+    cout<<str0<<"\t"<<str1<<endl;
+    cout<<"New..."<<endl;
+    cout<<combinations[ind1->gender][ind1->isColorBlind]<<"\t"<<combinations[ind2->gender][ind2->isColorBlind]<<endl;
+
+
+    cout<<"Executing new upgradation ...."<<endl;
+    vector<string> vect = functionx(str0, str1);
+    for(auto str : vect) cout<<str<<endl;
+    cout<<"End..."<<endl<<endl;
+
     string final = "";
     for(int i = 0; i < str0.length(); i+=2){
         // char t1 = str0[i];
@@ -132,6 +236,10 @@ vector<string> generate_meiosis_combinations(individual* ind1, individual *ind2)
     // cout<<"Executing_generate_meiosis_combinations"<<endl;
     return ans;
 }
+
+
+
+
 
 void calculate_print_probability(vector<string> vect){
     vector<string> male_progeny;
