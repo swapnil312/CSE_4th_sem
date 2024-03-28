@@ -172,7 +172,7 @@ void calculate_print_probability_autosomal(vector<string> vect, int disease, map
 }
 
 int main(){
-    cout<<"To calculate probabiltiy of your offspring getting any of the following disease..."<<endl;
+    cout<<"To calculate probabiltiy of your offspring getting any of the following diseases..."<<endl;
     int choice = 0;
     cout<<"_ _ _Enter 0 for color blindness_ _ _\n_ _ _Enter 1 for hemophilia_ _ _\n_ _ _Enter 2 for sickle cell anemia_ _ _"<<endl;
     map<int, string> diseaseMap;
