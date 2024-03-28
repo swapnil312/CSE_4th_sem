@@ -165,10 +165,10 @@ void calculate_print_probability_autosomal(vector<string> vect, int disease, map
         else if(count_c == 1) carrier++;
         else if(count_c == 2) affected++;
     }
-    float total_progeny = normal+carrier+affected;
-    cout<<"Probability of progeny having "<<disease_map[disease]<<" = "<<affected<<"   "<<(affected/total_progeny)*100<<"%"<<endl;
-    cout<<"Probability of progeny being carrier(but not affected) of the trait = "<<carrier<<"  "<<(carrier/total_progeny)*100<<"%"<<endl;
-    cout<<"Probability of progeny being absolutely normal(neither affected nor carrier) = "<<normal<<"   "<<(normal/total_progeny)*100<<"%"<<endl;
+    float total_progeny = vect.size();
+    cout<<"Probability of progeny having "<<disease_map[disease]<<" = "<<(affected/total_progeny)*100<<"%"<<endl;
+    cout<<"Probability of progeny being carrier(but not affected) of the trait = "<<(carrier/total_progeny)*100<<"%"<<endl;
+    cout<<"Probability of progeny being absolutely normal(neither affected nor carrier) = "<<(normal/total_progeny)*100<<"%"<<endl;
 }
 
 int main(){
