@@ -8,46 +8,27 @@ class individual{
     int gender = 0;
     map<int, vector<string>> combinations;   
 };
-void checkInput_forGen(char x){
-    if(!((x == 'M') || (x == 'm') || (x == 'F') || (x == 'f'))){
-        cout<<"Invalid input";
-        exit(-1);
-    }
-}
-void checkInput_forDisease(char x){
-    if(!((x == 'Y') || (x == 'y') || (x == 'N') || (x == 'n'))){
-        cout<<"Invalid input";
-        exit(-1);
-    }
-}
 
 individual* createIndividual(int disease, map<int,string> disease_map){
-    individual* ind = new individual;
-    char input_gen, input_hasDisease;
-    cout<<"Enter your gender ([M/m]->Male | [F/f]->Female): ";
-    cin>>input_gen;
-    checkInput_forGen(input_gen);
-    if((input_gen == 'M')||(input_gen == 'm')) ind->gender = 0;
-    else if((input_gen == 'F')||(input_gen == 'f')) ind->gender = 1;
-    cout<<"Do u have "<<disease_map[disease]<<" ([Y/y]->Yes | [N/n]->No): ";
-    cin>>input_hasDisease;
-    checkInput_forDisease(input_hasDisease);
-    if((input_hasDisease == 'Y')||(input_hasDisease == 'y')) ind->hasGotDisease = 1;
-    else if((input_hasDisease == 'N')||(input_hasDisease == 'n')) ind->hasGotDisease = 0;
-    return ind; 
+individual* newNode = new individual;
+cout<<"Enter your gender (0->Male/1->Female): ";
+cin>>newNode->gender;
+cout<<"Do u have "<<disease_map[disease]<<" (1->Yes/0->No): ";
+cin>>newNode->hasGotDisease;
+return newNode; 
 }
 
 individual* createSpouse(individual* ind,int disease, map<int, string> disease_map){
-    individual* spouse = new individual;
-    char input_hasDisease;
-    if(ind->gender == 0) spouse->gender = 1;
-    else if(ind->gender == 1) spouse->gender = 0;
-    cout<<"Is your spouse affected with "<<disease_map[disease]<<"(1->Yes/0->No): ";
-    cin>>input_hasDisease;
-    checkInput_forDisease(input_hasDisease);
-    if((input_hasDisease == 'Y')||(input_hasDisease == 'y')) spouse->hasGotDisease = 1;
-    else if((input_hasDisease == 'N')||(input_hasDisease == 'n')) spouse->hasGotDisease = 0;
-    return spouse; 
+individual* newNode = new individual;
+if(ind->gender == 0){
+    newNode->gender = 1;
+}
+else if(ind->gender == 1){
+    newNode->gender = 0;
+}
+cout<<"Do your spouse have"<<disease_map[disease]<<"(1->Yes/0->No): ";
+cin>>newNode->hasGotDisease;
+return newNode; 
 }
 
 vector<vector<int>> rtn_bipartite(vector<int> parent1, vector<int> parent2){
@@ -108,6 +89,7 @@ vector<string> functionx(string p1, string p2){
 
 
 vector<string> generate_meiosis_combinations(individual* ind1, individual *ind2, int disease, map<int,string> disease_map){
+    // vector<vector<string>> cbntn_clrBlnd(2,vector<string>(2));
     vector<vector<vector<string>>> combinations(3,vector<vector<string>>(2,vector<string>(2)));
     combinations[0][0][0] = "XnYn";
     combinations[0][0][1] = "XcYn";
@@ -121,6 +103,7 @@ vector<string> generate_meiosis_combinations(individual* ind1, individual *ind2,
     combinations[2][0][1] = "HcHc";
     combinations[2][1][0] = "HnHnHnHc";
     combinations[2][1][1] = "HcHc";
+
     string parent1 = combinations[disease][ind1->gender][ind1->hasGotDisease];
     string parent2 = combinations[disease][ind2->gender][ind2->hasGotDisease];
     vector<string> vect = functionx(parent1, parent2);
@@ -131,38 +114,53 @@ void calculate_print_probability_xlinked(vector<string> vect, int disease, map<i
     vector<string> male_progeny;
     vector<string> female_progeny;
     for(auto str: vect){
-        if(str[0] == str[2])female_progeny.push_back(str);
-        else male_progeny.push_back(str);
+        if(str[0] == str[2]){
+            female_progeny.push_back(str);
+        }
+        else{
+            male_progeny.push_back(str);
+        }
     }
     int male_isAffected = 0, female_isAffected = 0, female_carrier = 0;
     for(auto str: male_progeny){
         for(int i = 0; i < str.length(); i++){
-            if(str[i] == 'c') male_isAffected++;
+            if(str[i] == 'c'){
+                male_isAffected++;
+            }
         }
     }
     float total_males = male_progeny.size();
     cout<<"Probability of male progeny having "<<disease_map[disease]<<" = "<<(male_isAffected/total_males)*100<<"%"<<endl;
-    cout<<"Probability of male progeny not having "<<disease_map[disease]<<" = "<<((total_males-male_isAffected)/total_males)*100<<"%"<<endl;
+    cout<<"Probability of male progeny having "<<disease_map[disease]<<" = "<<((total_males-male_isAffected)/total_males)*100<<"%"<<endl;
     for(auto str: female_progeny){
         int count_c = 0;
         for(int i = 0; i < str.length(); i++){
-            if(str[i] == 'c') count_c++;
+            if(str[i] == 'c'){
+                count_c++;
+            }
         }
-        if(count_c == 1) female_carrier++;
-        else if(count_c == 2) female_isAffected++;
+        if(count_c == 1){
+            female_carrier++;
+        }
+        else if(count_c == 2){
+            female_isAffected++;
+        }
     }
     float total_females = female_progeny.size();
     cout<<"Probability of female progeny having "<<disease_map[disease]<<" = "<<(female_isAffected/total_females)*100<<"%"<<endl;
     cout<<"Probability of female progeny being carrier(but not affected) of the trait = "<<(female_carrier/total_females)*100<<"%"<<endl;
     cout<<"Probability of female progeny being absolutely normal(neither affected nor carrier) = "<<((total_females-(female_isAffected+female_carrier))/total_females)*100<<"%"<<endl;
 }
-
 void calculate_print_probability_autosomal(vector<string> vect, int disease, map<int,string> disease_map){
+    // vector<string> progeny = vect;
     int affected = 0, carrier = 0, normal = 0;
     int count_c = 0;
     for(auto str: vect){
         count_c = 0;
-        for(int i = 0; i < str.length(); i++) if(str[i] == 'c') count_c++;
+        for(int i = 0; i < str.length(); i++){
+            if(str[i] == 'c') count_c++;
+            // cout<<"count_c = "<<count_c<<endl;
+        }
         if(count_c == 0) normal++;
         else if(count_c == 1) carrier++;
         else if(count_c == 2) affected++;
@@ -175,7 +173,7 @@ void calculate_print_probability_autosomal(vector<string> vect, int disease, map
 
 int main(){
     cout<<"To calculate probabiltiy of your offspring getting any of the following diseases..."<<endl;
-    char choice;
+    int choice = 0;
     cout<<"_ _ _Enter 0 for color blindness_ _ _\n_ _ _Enter 1 for hemophilia_ _ _\n_ _ _Enter 2 for sickle cell anemia_ _ _"<<endl;
     map<int, string> diseaseMap;
     diseaseMap[0] = "color blindness";
@@ -183,25 +181,29 @@ int main(){
     diseaseMap[2] = "sickle cell anemia";
     cout<<"Enter choice: ";
     cin>>choice;
+    
     individual *me,*mySpouse;
     vector<string> vect;   
     switch(choice){
-        case '0':
+        case 0:
             me = createIndividual(0,diseaseMap);
             mySpouse = createSpouse(me,0,diseaseMap);
             vect = generate_meiosis_combinations(me,mySpouse,0,diseaseMap);  
             calculate_print_probability_xlinked(vect,0,diseaseMap);
             break;
-        case '1':
+        case 1:
             me = createIndividual(1,diseaseMap);
             mySpouse = createSpouse(me,1,diseaseMap);
             vect = generate_meiosis_combinations(me,mySpouse,1,diseaseMap);  
             calculate_print_probability_xlinked(vect,1,diseaseMap);
             break;
-        case '2':
+        case 2:
             me = createIndividual(2,diseaseMap);
             mySpouse = createSpouse(me,2,diseaseMap);
             vect = generate_meiosis_combinations(me,mySpouse,2,diseaseMap);
+            for(auto str: vect){
+                cout<<str<<endl;
+            }
             calculate_print_probability_autosomal(vect,2,diseaseMap);
             break;
         default:
