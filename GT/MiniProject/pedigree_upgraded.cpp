@@ -181,7 +181,7 @@ int main(){
     diseaseMap[2] = "sickle cell anemia";
     cout<<"Enter choice: ";
     cin>>choice;
-    cout<<"U need to just answer some basic questions..."<<endl; 
+    
     individual *me,*mySpouse;
     vector<string> vect;   
     switch(choice){
@@ -210,11 +210,5 @@ int main(){
             cout<<"Invalid choice!";
             return 0;
     }
-    
-    // vector<string> vect = generate_meiosis_combinations(me,mySpouse);
-    // for(auto str: vect){
-    //     cout<<str<<endl;
-    // }
-    // calculate_print_probability(vect);
     return 0;
 }
