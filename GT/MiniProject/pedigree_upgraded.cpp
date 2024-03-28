@@ -42,7 +42,7 @@ individual* createSpouse(individual* ind,int disease, map<int, string> disease_m
     char input_hasDisease;
     if(ind->gender == 0) spouse->gender = 1;
     else if(ind->gender == 1) spouse->gender = 0;
-    cout<<"Is your spouse affected with "<<disease_map[disease]<<"(1->Yes/0->No): ";
+    cout<<"Is your spouse affected with "<<disease_map[disease]<<" ([Y/y]->Yes | [N/n]->No): ";
     cin>>input_hasDisease;
     checkInput_forDisease(input_hasDisease);
     if((input_hasDisease == 'Y')||(input_hasDisease == 'y')) spouse->hasGotDisease = 1;
