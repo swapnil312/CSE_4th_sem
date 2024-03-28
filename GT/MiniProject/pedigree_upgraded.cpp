@@ -165,7 +165,7 @@ void calculate_print_probability_autosomal(vector<string> vect, int disease, map
         else if(count_c == 1) carrier++;
         else if(count_c == 2) affected++;
     }
-    float total_progeny = vect.size();
+    float total_progeny = normal+carrier+affected;
     cout<<"Probability of progeny having "<<disease_map[disease]<<" = "<<(affected/total_progeny)*100<<"%"<<endl;
     cout<<"Probability of progeny being carrier(but not affected) of the trait = "<<(carrier/total_progeny)*100<<"%"<<endl;
     cout<<"Probability of progeny being absolutely normal(neither affected nor carrier) = "<<(normal/total_progeny)*100<<"%"<<endl;
@@ -201,9 +201,9 @@ int main(){
             me = createIndividual(2,diseaseMap);
             mySpouse = createSpouse(me,2,diseaseMap);
             vect = generate_meiosis_combinations(me,mySpouse,2,diseaseMap);
-            for(auto str: vect){
-                cout<<str<<endl;
-            }
+            // for(auto str: vect){
+            //     cout<<str<<endl;
+            // }
             calculate_print_probability_autosomal(vect,2,diseaseMap);
             break;
         default:
