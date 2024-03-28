@@ -159,7 +159,7 @@ void calculate_print_probability_autosomal(vector<string> vect, int disease, map
         count_c = 0;
         for(int i = 0; i < str.length(); i++){
             if(str[i] == 'c') count_c++;
-            cout<<"count_c = "<<count_c<<endl;
+            // cout<<"count_c = "<<count_c<<endl;
         }
         if(count_c == 0) normal++;
         else if(count_c == 1) carrier++;
