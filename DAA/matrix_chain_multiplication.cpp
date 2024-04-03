@@ -1,6 +1,6 @@
 # include <bits/stdc++.h>
 using namespace std;
-// int no_ofArrays = 0;
+
 void print_array(int *ptr, int n){
     for(int i = 0; i < n; i++){
         int  *r = ptr;
