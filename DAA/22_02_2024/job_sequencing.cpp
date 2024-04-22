@@ -15,6 +15,9 @@ void jobSequence(struct job job_arr[], int n){
 	int booked_slots[n+1] = {0};
 	sort(job_arr, job_arr+n, compare);
 	for(int i = 0; i < n; i++){
+		cout<<"Job Id: "<<job_arr[i].id<<endl<<"Job profit: "<<job_arr[i].profit<<endl;
+	}
+	for(int i = 0; i < n; i++){
 		for(int j = 1; j <= n; j++){
 			if((booked_slots[j] == 0)&&(job_arr[i].deadline >= j)){
 			job_sequence.push_back(job_arr[i].id);
